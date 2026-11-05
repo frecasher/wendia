@@ -2909,43 +2909,60 @@ as */
 }
 
 /* =========================================================
-   REPARACIÓN DE ESCENAS Y RESPONSIVO MÓVIL (CORREGIDO)
+   SOLUCIÓN DEFINITIVA: ESPACIADO DE PORTADA Y ESCENAS
    ========================================================= */
 
-/* 1. Respetar el ocultamiento estricto de capas que manda JavaScript */
-.oculta,
-.capa-momento[style*="display: none"] {
-    display: none !important;
-}
-
-/* 2. Altura 100dvh ajustada solo para la pantalla activa */
-#portada,
-.capa-momento {
-    min-height: 100dvh;
-    height: 100dvh;
-    box-sizing: border-box;
-    padding-top: max(12px, env(safe-area-inset-top));
-    padding-bottom: max(16px, env(safe-area-inset-bottom));
+/* 1. Control estricto de visibilidad de pantallas */
+.capa-momento,
+#portada {
+    display: none;
 }
 
 #portada.activa,
+.capa-momento.activa,
 .capa-momento:not([style*="display: none"]) {
     display: flex !important;
+}
+
+/* 2. Estructura de la Portada en Flexbox flujo vertical */
+#portada {
+    min-height: 100dvh !important;
+    height: 100dvh !important;
     flex-direction: column !important;
     justify-content: space-between !important;
     align-items: center !important;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)) 16px !important;
+    box-sizing: border-box !important;
+    position: relative !important;
 }
 
-/* 3. Evitar que el texto de la hora se rompa en varios renglones */
+/* El widget superior ocupa su propio espacio real y no flota sobre el texto */
 #widget-tiempo,
 .tarjeta-widget {
-    max-width: 92% !important;
-    width: auto !important;
-    padding: 8px 16px !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 8px auto 0 auto !important;
+    z-index: 10 !important;
+    max-width: 90% !important;
+    white-space: nowrap !important;
 }
 
-#widget-tiempo span, 
-.tarjeta-widget span,
-#fecha-actual {
-    white-space: nowrap !important;
+/* El saludo central se posiciona en el espacio libre disponible */
+.contenido-portada {
+    margin: auto 0 !important;
+    text-align: center !important;
+    z-index: 10 !important;
+}
+
+/* 3. Ajuste para las escenas de Mañana, Tarde y Noche */
+.capa-momento {
+    min-height: 100dvh !important;
+    height: 100dvh !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)) 16px !important;
+    box-sizing: border-box !important;
 }
