@@ -2907,3 +2907,49 @@ as */
 .botonera-horario {
     display: none !important;
 }
+
+/* =========================================================
+   ADAPTACIÓN RESPONSIVA MÓVIL (S23 FE Y PANTALLAS LARGAS)
+   ========================================================= */
+
+/* 1. Ajustar la altura vertical usando unidades dinámicas reales (100dvh) */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+#portada, 
+.pantalla-activa, 
+.capa-momento,
+section {
+    min-height: 100dvh !important;
+    height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding-top: max(12px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. Corregir el texto de la hora y fecha en la tarjeta flotante superior */
+#widget-tiempo,
+.tarjeta-widget {
+    max-width: 92% !important;
+    width: auto !important;
+    padding: 8px 16px !important;
+}
+
+#widget-tiempo span, 
+.tarjeta-widget span,
+#fecha-actual {
+    white-space: nowrap !important; /* Mantiene "3:46 p. m." en una sola línea */
+}
+
+/* 3. Centrado del contenido principal de las escenas */
+.contenido-portada,
+.tarjeta-mensaje {
+    margin: auto 0 !important;
+    max-width: 92% !important;
+}
