@@ -2909,31 +2909,34 @@ as */
 }
 
 /* =========================================================
-   ADAPTACIÓN RESPONSIVA MÓVIL (S23 FE Y PANTALLAS LARGAS)
+   REPARACIÓN DE ESCENAS Y RESPONSIVO MÓVIL (CORREGIDO)
    ========================================================= */
 
-/* 1. Ajustar la altura vertical usando unidades dinámicas reales (100dvh) */
-html, body {
-    height: 100%;
-    overflow-x: hidden;
+/* 1. Respetar el ocultamiento estricto de capas que manda JavaScript */
+.oculta,
+.capa-momento[style*="display: none"] {
+    display: none !important;
 }
 
-#portada, 
-.pantalla-activa, 
-.capa-momento,
-section {
-    min-height: 100dvh !important;
-    height: 100dvh !important;
+/* 2. Altura 100dvh ajustada solo para la pantalla activa */
+#portada,
+.capa-momento {
+    min-height: 100dvh;
+    height: 100dvh;
+    box-sizing: border-box;
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+#portada.activa,
+.capa-momento:not([style*="display: none"]) {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
     align-items: center !important;
-    padding-top: max(12px, env(safe-area-inset-top)) !important;
-    padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
-    box-sizing: border-box !important;
 }
 
-/* 2. Corregir el texto de la hora y fecha en la tarjeta flotante superior */
+/* 3. Evitar que el texto de la hora se rompa en varios renglones */
 #widget-tiempo,
 .tarjeta-widget {
     max-width: 92% !important;
@@ -2944,12 +2947,5 @@ section {
 #widget-tiempo span, 
 .tarjeta-widget span,
 #fecha-actual {
-    white-space: nowrap !important; /* Mantiene "3:46 p. m." en una sola línea */
-}
-
-/* 3. Centrado del contenido principal de las escenas */
-.contenido-portada,
-.tarjeta-mensaje {
-    margin: auto 0 !important;
-    max-width: 92% !important;
+    white-space: nowrap !important;
 }
