@@ -1,0 +1,2909 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- LUZ AMBIENTAL CAMBIANTE EN EL BODY --- */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: #10182F;
+    /* Transición suave cuando cambie de periodo */
+    transition: background 1.8s ease-in-out;
+}
+
+/* 1. Mañana: Tono dorado y radiante */
+body.ambiente-manana {
+    background: 
+        url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E'),
+        radial-gradient(circle at 50% 20%, rgba(254, 235, 175, 0.4) 0%, transparent 60%),
+        radial-gradient(circle at 20% 80%, rgba(244, 201, 93, 0.25) 0%, transparent 45%),
+        #FDFBF7;
+}
+
+/* 2. Tarde: Tono cálidamente acaramelado */
+body.ambiente-tarde {
+    background: 
+        url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E'),
+        radial-gradient(circle at 50% 30%, rgba(255, 218, 185, 0.4) 0%, transparent 60%),
+        radial-gradient(circle at 80% 70%, rgba(240, 168, 120, 0.22) 0%, transparent 45%),
+        #FAF6F0;
+}
+
+/* 3. Noche: Tono azulado nocturno sutil */
+body.ambiente-noche {
+    background: 
+        url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E'),
+        radial-gradient(circle at 50% 30%, rgba(169, 184, 223, 0.35) 0%, transparent 60%),
+        radial-gradient(circle at 50% 80%, rgba(72, 93, 140, 0.2) 0%, transparent 50%),
+        #F4F6FB;
+}
+
+/* --- PARTÍCULAS DE LUZ EN LAS FLORES --- */
+#contenedor-particulas {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    height: 160px;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.particula-luz {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #FFF5D0;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #F4C95D, 0 0 12px #FFFFFF;
+    opacity: 0;
+    animation: flotarLuz linear infinite;
+}
+
+@keyframes flotarLuz {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.6);
+    }
+    30% {
+        opacity: 0.9;
+    }
+    80% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-120px) scale(1.2);
+    }
+}
+
+/* Control general de pantallas */
+.pantalla {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.pantalla.activa {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pantalla.oculta {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Estilos de texto */
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 20px;
+    color: #10182F;
+}
+
+h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+p.respiracion {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4A5568;
+    animation: respirar 2.5s infinite ease-in-out;
+}
+
+/* Animaciones de opacidad y visibilidad */
+.transicion-suave {
+    position: absolute;
+    transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+}
+
+.oculto {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+/* Animación del texto palpitante */
+@keyframes respirar {
+    0%, 100% { opacity: 0.3; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1.02); }
+}
+
+/* --- SISTEMA DE PÉTALOS --- */
+#contenedor-petalos {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Para que no interfieran con el clic */
+    z-index: -1;
+}
+
+/* Iluminación central para resaltar el texto */
+body {
+    background: radial-gradient(circle, #FFFFFF 0%, #F5F2EA 100%); 
+    color: #10182F;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* =========================================================
+   SISTEMA DE PÉTALOS 3D DE PORTADA (TU DISEÑO ORIGINAL)
+   ========================================================= */
+#portada {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+#contenedor-petalos {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    z-index: 30 !important;
+}
+
+.petalo {
+    position: absolute;
+    top: -10vh;
+    opacity: 0.8;
+    will-change: transform, opacity;
+    animation: caer linear infinite !important;
+}
+
+/* Formas orgánicas e irregulares */
+.hortensia {
+    width: 14px;
+    height: 14px;
+    background-color: #C084FC; /* Tono violeta pastel suave */
+    border-radius: 40% 60% 55% 45% / 45% 55% 40% 60%;
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2), 0 0 6px rgba(192, 132, 252, 0.4);
+}
+
+.girasol {
+    width: 15px;
+    height: 25px;
+    background: linear-gradient(135deg, #F4C95D 0%, #EAA919 100%);
+    border-radius: 50% 0 50% 0;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.lirio {
+    width: 18px;
+    height: 28px;
+    background-color: #FFFFFF;
+    border-radius: 50% 0 50% 0;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.15), inset -1px -1px 2px rgba(0,0,0,0.05);
+}
+
+/* Animación con rotación 3D e integración de la escala dinámica */
+@keyframes caer {
+    0% { 
+        transform: translateY(0) scale(var(--escala, 1)) rotateZ(0deg) rotateX(0deg) rotateY(0deg); 
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.85;
+    }
+    85% {
+        opacity: 0.85;
+    }
+    100% { 
+        transform: translateY(120vh) scale(var(--escala, 1)) rotateZ(360deg) rotateX(180deg) rotateY(360deg); 
+        opacity: 0;
+    }
+}
+
+/* Mejora al texto de transición para que se vea más elegante */
+#mensaje-transicion h2 {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    color: #26334D;
+}
+
+/* Sombras minimalistas para los textos */
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 20px;
+    color: #10182F;
+    text-shadow: 1px 2px 4px rgba(16, 24, 47, 0.1); /* Sombra elegante */
+}
+
+p.respiracion {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4A5568;
+    animation: respirar 2.5s infinite ease-in-out;
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* --- ANIMACIONES DE ENREDADERAS --- */
+.decoracion-floral {
+    position: absolute;
+    width: 100%;
+    z-index: 15; /* Por encima de los pétalos de fondo */
+    pointer-events: none;
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease;
+}
+
+#enredadera-top {
+    top: 0;
+    left: 0;
+    height: 120px;
+    animation: entrarTop 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+#enredadera-bottom {
+    bottom: -5px; /* Evita bordes cortados */
+    left: 0;
+    height: 100px;
+    animation: entrarBottom 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    /* Sombra exterior para simular el aura de tu boceto */
+    filter: drop-shadow(0px -4px 12px rgba(72, 93, 140, 0.2)); 
+}
+
+/* SVGs asegurados al ancho total */
+.decoracion-floral svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Clases de salida (cuando da clic) */
+.saliendo#enredadera-top {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.saliendo#enredadera-bottom {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+/* Keyframes de entrada automática */
+@keyframes entrarTop {
+    0% { transform: translateY(-100%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes entrarBottom {
+    0% { transform: translateY(100%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* --- JARDÍN BASE (Centrado Absoluto) --- */
+/* --- JARDÍN BASE (Con transición ambiental suave) --- */
+#jardin-base {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    z-index: 15;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    
+    /* Capa 3 de la propuesta: Transición ambiental suave hacia arriba */
+    background: linear-gradient(to top, rgba(143, 165, 132, 0.15) 0%, rgba(143, 165, 132, 0) 100%);
+    
+    animation: entrarBottom 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease;
+}
+
+.saliendo#jardin-base {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+/* El pasto curvo (Se mantiene igual, cubriendo todo el ancho) */
+/* El pasto curvo (Con borde más suave) */
+.pastito {
+    position: absolute;
+    bottom: -30px;
+    left: -10%;
+    width: 120%;
+    height: 80px;
+    background: linear-gradient(to bottom, #8FA584, #6B8061); 
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    /* Sombra hacia arriba para difuminar el borde duro */
+    box-shadow: 0 -8px 25px rgba(107, 128, 97, 0.15), 0 -4px 15px rgba(107, 128, 97, 0.25);
+    z-index: 1; 
+}
+
+/* Nuevo contenedor para controlar el espaciado de las flores */
+.contenedor-flores {
+    position: relative;
+    width: 100%;
+    max-width: 600px; /* Limita la separación en pantallas de PC */
+    height: 100%;
+    display: flex;
+    justify-content: space-around; /* Reparte el espacio equitativamente */
+    align-items: flex-end; /* Alinea las flores por la base */
+    padding-bottom: 20px; /* Las levanta ligeramente del borde inferior */
+    z-index: 2; /* Por encima del pasto */
+}
+
+/* Contenedor individual de cada planta */
+.planta-jardin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Ya no necesita position absolute ni bottom */
+}
+
+/* --- CLASE PARA LAS FLORES (Imagenes con balanceo) --- */
+.flor-imagen {
+    height: auto;
+    display: block;
+    filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.12)); /* Sombra para profundidad */
+    transform-origin: bottom center; /* El viento las mueve desde la base */
+    animation: balanceoViento 5s ease-in-out infinite alternate;
+}
+
+/* --- TAMAÑOS DE FLORES (Hortensia como protagonista) --- */
+.img-hortensia {
+    width: 90px; /* ¡La hacemos la más grande de todas! */
+    margin-bottom: -20px; /* La enterramos un poquito más en el pasto */
+    animation-delay: 0s;
+}
+
+.img-girasol {
+    width: 80px; /* Se reduce para ser acompañante */
+    margin-bottom: -10px; 
+    animation-delay: 0.5s;
+}
+
+.img-lirio {
+    width: 85px; /* Tamaño de acompañante */
+    margin-bottom: -10px;
+    animation-delay: 1s;
+}
+
+/* --- ANIMACIÓN DE VIENTO --- */
+@keyframes balanceoViento {
+    0% {
+        transform: rotate(-1.5deg);
+    }
+    100% {
+        transform: rotate(2deg);
+    }
+}
+
+/* --- BLOQUE DE SALUDO CON ORNAMENTOS --- */
+/* --- WIDGET SUPERIOR EN TARJETA ENMARCADA (Con animación de entrada) --- */
+#widget-tiempo {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    width: auto;
+    max-width: 90%;
+    
+    /* 1. Entra desde arriba suavemente */
+    opacity: 0;
+    animation: entradaDesdeArriba 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.tarjeta-widget {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 8px 18px;
+    box-shadow: 0 4px 15px rgba(16, 24, 47, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+#fecha-actual {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #5A6A85;
+}
+
+#hora-frase-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#reloj-actual {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #10182F;
+}
+
+.separador-punto {
+    font-size: 0.5rem;
+    color: #F4C95D;
+}
+
+#frase-momento {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    font-style: italic;
+    color: #4A5568;
+}
+
+/* --- BLOQUE CENTRAL (Animaciones en cascada) --- */
+.bloque-saludo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 2. Título principal */
+.bloque-saludo h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 600;
+    font-style: italic;
+    color: #10182F;
+    margin-bottom: 0;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+
+    opacity: 0;
+    animation: entradaDesdeAbajo 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+/* 3. Línea dinámica que se abre horizontalmente */
+.linea-dinamica {
+    width: 140px;
+    height: 2px;
+    margin: 12px 0 14px 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        #485D8C 25%, 
+        #F4C95D 50%, 
+        #485D8C 75%, 
+        transparent 100%
+    );
+    background-size: 200% 100%;
+
+    opacity: 0;
+    animation: expansionLinea 1s ease-out 0.8s forwards, desplazamientoLuz 4s ease-in-out infinite 1.8s;
+}
+
+.subtextos-agrupados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 4. Frase secundaria */
+.frase-rincon {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    font-style: italic;
+    color: #4A5568;
+    letter-spacing: 0.8px;
+    margin: 0;
+
+    opacity: 0;
+    animation: entradaDesdeAbajo 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
+}
+
+/* 5. Texto "toca la pantalla" */
+p.respiracion {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #718096;
+    margin: 0;
+
+    opacity: 0;
+    animation: entradaDesdeAbajo 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards, respirar 2.5s infinite ease-in-out 2.6s;
+}
+
+/* --- REGLAS DE SALIDA AL DAR CLIC --- */
+#widget-tiempo.oculto,
+#contenido-inicial.oculto {
+    opacity: 0 !important;
+    transform: translateY(-20px) !important;
+    transition: opacity 1s ease, transform 1s ease;
+    pointer-events: none;
+}
+
+/* --- DEFINICIÓN DE KEYFRAMES DE ENTRADA --- */
+@keyframes entradaDesdeArriba {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes entradaDesdeAbajo {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes expansionLinea {
+    0% {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes desplazamientoLuz {
+    0% { background-position: 100% 0%; }
+    100% { background-position: -100% 0%; }
+}
+
+@keyframes respirar {
+    0%, 100% { opacity: 0.4; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1.02); }
+}
+
+/* Aceleración por hardware para pétalos */
+.petalo {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Aceleración por hardware para partículas de luz */
+.particula-luz {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+/* Aceleración para las flores */
+.flor-imagen {
+    will-change: transform;
+}
+
+/* --- CORTINA DE TRANSICIÓN FLORAL (A Pantalla Completa) --- */
+#cortina-transicion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100; /* Por encima de absolutamente todo */
+    pointer-events: none; /* No bloquea clics antes de activarse */
+    display: none; /* Se activa por JS */
+}
+
+#cortina-transicion.activa {
+    display: block;
+}
+
+/* Las cabezas de flores individuales que inundarán la pantalla */
+.flor-transicion {
+    position: absolute;
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+    animation: brotarFlor 1.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Animación: Las flores crecen gigantezcas, giran y se asientan */
+@keyframes brotarFlor {
+    0% {
+        transform: scale(0) rotate(-45deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.15) rotate(var(--rotacion-final)); /* 15% más grande para solaparse */
+        opacity: 1;
+    }
+}
+
+/* Efecto de desvanecimiento de toda la cortina una vez cargada la escena */
+#cortina-transicion.desvanecer {
+    animation: desvanecerCortina 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes desvanecerCortina {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.1); /* Ligero efecto de expansión al despejar */
+    }
+}
+
+/* =========================================================
+   ESCENA MAÑANA: ESTRUCTURA DE CAPAS Y PAISAJE DINÁMICO
+   ========================================================= */
+
+.escena-capas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* CAPA 1: CIELO DE MAÑANA (Degradado Ámbar/Dorado) */
+.cielo-manana {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg, 
+        #E88B52 0%, 
+        #F9B875 35%, 
+        #FDE1A3 65%, 
+        #FFF4D6 100%
+    );
+    z-index: 1;
+}
+
+/* 1. Sol: Movido a la derecha (65%) y bajado a la altura del horizonte (50%) */
+.sol-resplandor {
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    width: 270px;
+    height: 270px;
+    background: radial-gradient(
+        circle, 
+        rgba(255, 255, 240, 0.98) 0%, 
+        rgba(255, 215, 120, 0.75) 35%, 
+        rgba(249, 184, 117, 0) 70%
+    );
+    border-radius: 50%;
+    filter: blur(12px);
+    z-index: 2;
+    animation: pulsoSolAmanecer 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulsoSolAmanecer {
+    0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.85; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+}
+
+/* --- CAPAS DE IMÁGENES DEL PAISAJE --- */
+.capa-paisaje {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.capa-montanas {
+    bottom: 27%;
+    height: 33vh;
+    z-index: 3;
+    opacity: 0.95;
+    filter: drop-shadow(0 -5px 15px rgba(232, 139, 82, 0.3));
+}
+
+/* 3. Río y Bosque: Ligeramente ajustado para encajar con las montañas */
+.contenedor-rio {
+    position: absolute;
+    bottom: 18%;
+    width: 100%;
+    height: 34vh;
+    z-index: 4;
+}
+
+.capa-rio {
+    bottom: 0;
+    height: 100%;
+}
+
+.brillo-agua {
+    position: absolute;
+    top: 45%;
+    left: 20%;
+    width: 60%;
+    height: 15px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    filter: blur(4px);
+    animation: reflejoAgua 4s ease-in-out infinite alternate;
+}
+
+@keyframes reflejoAgua {
+    0% { opacity: 0.2; transform: translateX(-15px) scaleX(0.8); }
+    100% { opacity: 0.7; transform: translateX(15px) scaleX(1.1); }
+}
+
+/* Capa 4: Campo de Girasoles (Con máscara que elimina el borde blanco abajo) */
+.capa-girasoles-front {
+    bottom: -8px;
+    height: 50vh;
+    z-index: 5;
+    object-position: bottom center;
+    filter: drop-shadow(0 -4px 10px rgba(0, 0, 0, 0.15));
+    
+    /* Elimina el corte blanco del inferior */
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 14%, black 100%);
+    mask-image: linear-gradient(to top, transparent 0%, black 14%, black 100%);
+    
+    /* Movimiento de oscilación por viento */
+    transform-origin: bottom center;
+    animation: mecerGirasoles 5s ease-in-out infinite alternate;
+}
+
+@keyframes mecerGirasoles {
+    0% { transform: rotate(-0.8deg) scale(1); }
+    100% { transform: rotate(1.2deg) scale(1.01); }
+}
+
+/* Capa 5: Ramas superiores */
+/* --- HOJAS CORREGIDAS Y PEGADAS 100% A LA ESQUINA --- */
+.capa-hojas-top {
+    top: -25px !important;
+    left: -30px !important;
+    width: 85vw !important;
+    max-width: 420px !important;
+    height: auto !important;
+    z-index: 6;
+    transform-origin: top left;
+    transform: scale(1.1); /* Escala sutil para rellenar bordes recortados */
+    filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.12));
+}
+
+/* --- PÉTALOS DE GIRASOL FLOTANDO CAYENDO --- */
+#contenedor-petalos-manana {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 7;
+    overflow: hidden;
+}
+
+.petalo-girasol-caida {
+    position: absolute;
+    width: 14px;
+    height: 24px;
+    /* Degradado cálido de pétalo de girasol */
+    background: linear-gradient(135deg, #FFD000 0%, #FF9100 75%, #E65100 100%);
+    border-radius: 50% 0% 50% 50%;
+    opacity: 0.85;
+    box-shadow: 0 2px 5px rgba(230, 81, 0, 0.25);
+    will-change: transform, opacity;
+    animation: caidaPetaloGirasol linear infinite;
+}
+
+@keyframes caidaPetaloGirasol {
+    0% {
+        transform: translateY(-30px) rotate(0deg) rotateY(0deg);
+        opacity: 0;
+    }
+    12% {
+        opacity: 0.9;
+    }
+    88% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(105vh) translateX(70px) rotate(360deg) rotateY(180deg);
+        opacity: 0;
+    }
+}
+
+/* --- MARIPOSA ANIMADA 3D --- */
+.mariposa-wrapper {
+    position: absolute;
+    bottom: 35%;
+    left: 25%;
+    z-index: 8;
+    pointer-events: none;
+    animation: vueloMariposa 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+}
+
+.mariposa {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    transform: rotate(-15deg);
+}
+
+.ala {
+    position: absolute;
+    width: 10px;
+    height: 14px;
+    background: linear-gradient(135deg, #FF9F43, #EE5253);
+    border-radius: 10px 10px 2px 8px;
+    box-shadow: 0 0 4px rgba(238, 82, 83, 0.6);
+}
+
+.ala-izquierda {
+    left: 0;
+    transform-origin: right center;
+    animation: aleteoIzq 0.35s ease-in-out infinite alternate;
+}
+
+.ala-derecha {
+    right: 0;
+    transform-origin: left center;
+    border-radius: 10px 10px 8px 2px;
+    animation: aleteoDer 0.35s ease-in-out infinite alternate;
+}
+
+@keyframes aleteoIzq {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(65deg); }
+}
+
+@keyframes aleteoDer {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(-65deg); }
+}
+
+@keyframes vueloMariposa {
+    0% { transform: translate(0, 0) scale(0.9); }
+    25% { transform: translate(40px, -25px) scale(1.05); }
+    50% { transform: translate(15px, -50px) scale(0.95); }
+    75% { transform: translate(-30px, -20px) scale(1); }
+    100% { transform: translate(20px, -40px) scale(1.1); }
+}
+
+/* --- MOTAS DE LUZ DE SOL --- */
+#motas-sol-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+    pointer-events: none;
+}
+
+.mota-sol {
+    position: absolute;
+    background: #FFF0A5;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #F4C95D;
+    opacity: 0;
+    animation: flotarMota linear infinite;
+}
+
+@keyframes flotarMota {
+    0% { opacity: 0; transform: translateY(0) scale(0.5); }
+    40% { opacity: 0.8; }
+    100% { opacity: 0; transform: translateY(-90px) scale(1.2); }
+}
+
+/* --- CAPA UI: TIPOGRAFÍA Y MENSAJE DE BUENOS DÍAS --- */
+.contenido-escena-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.titulo-amanecer {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    font-style: italic;
+    color: #4A2810;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.6);
+}
+
+.separador-corazon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 8px 0 20px 0;
+}
+
+.linea-corta {
+    width: 35px;
+    height: 1px;
+    background: #4A2810;
+    opacity: 0.5;
+}
+
+.corazon-icono, .corazon-mini {
+    font-size: 0.9rem;
+    color: #4A2810;
+    opacity: 0.7;
+}
+
+.mensaje-tarjeta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #4A2810;
+    text-align: center;
+    max-width: 82%;
+    margin: 0 0 15px 0;
+    text-shadow: 0 1px 4px rgba(255, 255, 255, 0.5);
+}
+
+.pie-escena {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2.5px;
+    color: #6E3F1D;
+    font-weight: 500;
+}
+
+/* --- NUBES CON SILUETA DEFINIDA Y MOVIMIENTO ORGANICO --- */
+#contenedor-nubes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 55%;
+    z-index: 2.5;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.nube {
+    position: absolute;
+    height: auto;
+    filter: drop-shadow(0 4px 12px rgba(232, 139, 82, 0.25));
+    will-change: transform;
+}
+
+/* Nube 1: Parte alta superior */
+.nube-1 {
+    top: 14%;
+    left: -60vw;
+    width: 220px;
+    animation: desplazarNube 38s linear infinite;
+}
+
+/* Nube 2: Grande y cercana al sol */
+.nube-2 {
+    top: 26%;
+    left: -70vw;
+    width: 270px;
+    animation: desplazarNube 48s linear infinite 14s;
+}
+
+/* Nube 3: Trazo bajo sobre las montañas */
+.nube-3 {
+    top: 40%;
+    left: -50vw;
+    width: 190px;
+    animation: desplazarNube 32s linear infinite 5s;
+}
+
+/* Trayectoria suave de izquierda a derecha */
+@keyframes desplazarNube {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(180vw);
+    }
+}
+
+/* --- INTERACTIVIDAD EN CAPAS DEL PAISAJE --- */
+.sol-resplandor,
+.capa-montanas,
+.capa-girasoles-front {
+    pointer-events: auto !important; /* Permite detectar toque en el celular */
+    cursor: pointer;
+}
+
+/* 1. ANIMACIÓN SOL: RESPLANDOR INTENSO */
+.sol-resplandor.destello-activo {
+    animation: estallidoLuz 0.8s ease-out !important;
+}
+
+@keyframes estallidoLuz {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: blur(12px) brightness(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.6);
+        filter: blur(25px) brightness(2.2);
+        box-shadow: 0 0 80px rgba(255, 255, 255, 0.9);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: blur(12px) brightness(1);
+    }
+}
+
+/* 2. ANIMACIÓN MONTAÑAS: PULSO AL TOCAR */
+.capa-montanas.toque-montana {
+    animation: reaccionMontana 0.6s ease-in-out !important;
+}
+
+@keyframes reaccionMontana {
+    0% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.02) translateY(-6px); }
+    100% { transform: scale(1) translateY(0); }
+}
+
+/* TEXTO FLOTANTE DE LAS MONTAÑAS */
+.mensaje-montana-flotante {
+    position: absolute;
+    z-index: 25;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #4A2810;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 5px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    animation: elevarYDesaparecer 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes elevarYDesaparecer {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(0.85);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -15px) scale(1);
+    }
+    75% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -55px) scale(0.95);
+    }
+}
+
+/* 3. ANIMACIÓN GIRASOLES: MECIDO RÁPIDO */
+.capa-girasoles-front.toque-girasol {
+    animation: sacudidaGirasoles 0.7s ease-in-out !important;
+}
+
+@keyframes sacudidaGirasoles {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-2.5deg) scale(1.02); }
+    75% { transform: rotate(2.5deg) scale(1.02); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+/* --- WIDGET CÁPSULA MODERNO DE LA MAÑANA --- */
+.widget-capsula-manana {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 18px;
+    background: rgba(45, 25, 10, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 215, 120, 0.38);
+    border-radius: 35px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    pointer-events: auto;
+    max-width: 90%;
+    width: max-content;
+}
+
+.widget-col-izq {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icono-flor-widget {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.widget-textos-fecha {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.dia-destacado {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    line-height: 1.25;
+}
+
+.fecha-subtexto {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.25;
+}
+
+.widget-separador {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.widget-col-der {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.icono-sol-widget {
+    width: 15px;
+    height: 15px;
+}
+
+.hora-texto {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   ESCENA NOCHE - PASO 1: CIELO, LUNA CRECIENTE Y ESTRELLAS
+   ========================================================= */
+
+/* Degradado del cielo: Azul Índigo profundo -> Violeta Místico -> Lavanda de horizonte */
+.cielo-noche {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg, 
+        #0A0E1A 0%, 
+        #121829 25%, 
+        #1E1B4B 55%, 
+        #3B2D54 80%,
+        #503862 100%
+    );
+    z-index: 1;
+}
+
+/* AJUSTE DE LUNA (Evita que choque con el título) */
+.luna-wrapper {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    width: 55px;
+    height: 55px;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.luna-creciente-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px rgba(255, 235, 180, 0.8));
+    animation: pulsoLunaSuave 5s ease-in-out infinite alternate;
+}
+
+.luna-resplandor-halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(
+        circle, 
+        rgba(255, 235, 180, 0.4) 0%, 
+        rgba(160, 130, 220, 0.15) 50%, 
+        transparent 75%
+    );
+    border-radius: 50%;
+    filter: blur(10px);
+}
+
+@keyframes pulsoLunaSuave {
+    0% { transform: scale(0.96); filter: drop-shadow(0 0 8px rgba(255, 235, 180, 0.7)); }
+    100% { transform: scale(1.04); filter: drop-shadow(0 0 16px rgba(255, 235, 180, 0.95)); }
+}
+
+/* --- POSICIONAMIENTO DEL TEXTO (Bajado a la zona libre del cielo) --- */
+.ui-noche {
+    padding-top: 105px !important; /* Espacio extra para despejar la parte superior */
+}
+
+/* --- ESTRELLAS MÁS PRESENTES Y EN MOVIMIENTO --- */
+#contenedor-estrellas-noche {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    z-index: 1.5;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.estrella-noche {
+    position: absolute;
+    background: #FFFFFF;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #FFFFFF, 0 0 14px rgba(167, 139, 250, 0.9);
+    will-change: transform, opacity;
+    animation: titilarYFlotar linear infinite alternate;
+}
+
+@keyframes titilarYFlotar {
+    0% {
+        opacity: 0.3;
+        transform: scale(0.8) translate(0, 0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.4) translate(3px, -4px);
+        box-shadow: 0 0 12px #FFFFFF, 0 0 18px rgba(196, 181, 253, 1);
+    }
+    100% {
+        opacity: 0.4;
+        transform: scale(0.9) translate(-3px, 4px);
+    }
+}
+
+/* --- LUCIÉRNAGAS FLOTANDO CERCA DEL FAROL Y HORTENSIAS --- */
+#contenedor-luciernagas-noche {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4.5; /* Por delante del río, por detrás de hortensias */
+    pointer-events: none;
+}
+
+.luciernaga {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #FDE047;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #FACC15, 0 0 18px #EAB308;
+    will-change: transform, opacity;
+    animation: vueloLuciernaga ease-in-out infinite alternate;
+}
+
+@keyframes vueloLuciernaga {
+    0% {
+        opacity: 0.2;
+        transform: translate(0, 0) scale(0.7);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(22px, -35px) scale(1.3);
+        box-shadow: 0 0 14px #FEF08A, 0 0 24px #FACC15;
+    }
+    100% {
+        opacity: 0.3;
+        transform: translate(-18px, -65px) scale(0.8);
+    }
+}
+
+/* --- PÉTALOS DE HORTENSIA CAYENDO EN NOCHE --- */
+#contenedor-petalos-noche {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 7;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.petalo-hortensia-caida {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, #C4B5FD 0%, #8B5CF6 60%, #6D28D9 100%);
+    border-radius: 50% 10% 50% 50%;
+    opacity: 0.85;
+    box-shadow: 0 2px 6px rgba(109, 40, 217, 0.3);
+    will-change: transform, opacity;
+    animation: caidaPetaloHortensia linear infinite;
+}
+
+@keyframes caidaPetaloHortensia {
+    0% {
+        transform: translateY(-20px) rotate(0deg) rotateY(0deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.9;
+    }
+    85% {
+        opacity: 0.75;
+    }
+    100% {
+        transform: translateY(105vh) translateX(55px) rotate(360deg) rotateY(180deg);
+        opacity: 0;
+    }
+}
+
+/* TIPOGRAFÍA Y MENSAJE Y TEXTOS NOCTURNOS */
+.titulo-noche {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    font-style: italic;
+    color: #FFFFFF;
+    margin: 0;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.linea-noche {
+    background: #E2E8F0 !important;
+    opacity: 0.6 !important;
+}
+
+.corazon-noche {
+    color: #E2E8F0 !important;
+}
+
+.mensaje-noche {
+    color: #F8FAFC !important;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+.pie-noche {
+    color: #CBD5E1 !important;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+}
+
+/* FORZAR TAMAÑO Y POSICIÓN EN TODAS LAS ESCENAS */
+#escena-manana,
+#escena-tarde,
+#escena-noche {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden;
+}
+
+/* =========================================================
+   ESCENA NOCHE - PASO 2: POSICIONAMIENTO Y ENCUADRE DE CAPAS
+   ========================================================= */
+
+.capa-paisaje-noche {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    will-change: transform;
+}
+
+/* Capa 2: Montañas al fondo (asentadas tras el río) */
+.capa-noche-montanas {
+    bottom: 27%;
+    height: 33vh;
+    z-index: 3;
+    opacity: 0.95;
+    filter: drop-shadow(0 -5px 15px rgba(10, 14, 26, 0.5));
+}
+
+/* Capa 3: Río y Bosque Intermedio */
+.contenedor-rio-noche {
+    position: absolute;
+    bottom: 18%;
+    width: 100%;
+    height: 34vh;
+    z-index: 4;
+}
+
+.capa-noche-rio {
+    bottom: 0;
+    height: 100%;
+}
+
+/* Capa 4: Campo de Hortensias y Farol (Primer plano con máscara anti-borde blanco) */
+.capa-noche-hortensias {
+    bottom: -8px;
+    height: 50vh;
+    z-index: 5;
+    object-position: bottom center;
+    filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.4));
+    
+    /* Máscara para suavizar la base inferior */
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 14%, black 100%);
+    mask-image: linear-gradient(to top, transparent 0%, black 14%, black 100%);
+}
+
+/* Capa 5: Hojas superiores pegadas 100% a la esquina */
+.capa-noche-hojas-top {
+    top: -25px !important;
+    left: -30px !important;
+    width: 85vw !important;
+    max-width: 420px !important;
+    height: auto !important;
+    z-index: 6;
+    transform-origin: top left;
+    transform: scale(1.1);
+    filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.35));
+}
+
+/* --- WIDGET CÁPSULA MODERNO DE LA NOCHE --- */
+.widget-capsula-noche {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 18px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 35px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    pointer-events: auto;
+    max-width: 90%;
+    width: max-content;
+}
+
+/* =========================================================
+   INTERACTIVIDAD TÁCTIL NOCTURNA (Luna, Montañas, Farol)
+   ========================================================= */
+
+.luna-wrapper,
+#montanas-noche-interactivas,
+#hortensias-noche-interactivas {
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+/* 1. REACCIÓN DE LA LUNA AL TOCAR */
+.luna-creciente-svg.destello-luna-activo {
+    animation: estallidoLuna 0.9s ease-out !important;
+}
+
+@keyframes estallidoLuna {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(255, 235, 180, 0.8));
+    }
+    50% {
+        transform: scale(1.4) rotate(-10deg);
+        filter: drop-shadow(0 0 35px rgba(255, 255, 255, 1)) drop-shadow(0 0 60px rgba(167, 139, 250, 0.9));
+    }
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(255, 235, 180, 0.8));
+    }
+}
+
+/* 2. REACCIÓN DE MONTAÑAS NOCTURNAS */
+#montanas-noche-interactivas.toque-montana-noche {
+    animation: reaccionMontanaNoche 0.6s ease-in-out !important;
+}
+
+@keyframes reaccionMontanaNoche {
+    0% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.02) translateY(-5px); }
+    100% { transform: scale(1) translateY(0); }
+}
+
+/* MENSAJES FLOTANTES NOCTURNOS (Tono Violeta Traslúcido) */
+.mensaje-noche-flotante {
+    position: absolute;
+    z-index: 25;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #F8FAFC;
+    background: rgba(30, 27, 75, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 6px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    animation: elevarYDesaparecerNoche 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes elevarYDesaparecerNoche {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(0.85);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -15px) scale(1);
+    }
+    75% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -55px) scale(0.95);
+    }
+}
+
+/* 3. REACCIÓN DE HORTENSIAS Y FAROL */
+#hortensias-noche-interactivas.toque-hortensia-noche {
+    animation: sacudidaHortensias 0.7s ease-in-out !important;
+}
+
+@keyframes sacudidaHortensias {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-2deg) scale(1.01); }
+    75% { transform: rotate(2deg) scale(1.01); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+/* =========================================================
+   ESCENA TARDE - PASO 1: CIELO AZUL/DORADO, SOL Y NUBES
+   ========================================================= */
+
+#escena-tarde {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden;
+}
+
+/* CAPA 1: CIELO DE TARDE (Azul intenso arriba -> Transición a Amarillo/Ámbar al horizonte) */
+/* Degradado acuarela: Azul pastel arriba -> Blanco/Crema radiante central -> Dorado de atardecer */
+.cielo-tarde {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg, 
+        #82B7DC 0%, 
+        #B9E0F7 18%, 
+        #FFF9E6 38%, 
+        #FDE68A 62%, 
+        #FDBA74 84%,
+        #dbad71 100%
+    );
+    z-index: 1;
+}
+
+/* Sol Dorado de Atardecer */
+.sol-resplandor-tarde {
+    position: absolute;
+    top: 48%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(
+        circle, 
+        rgba(255, 255, 245, 0.98) 0%, 
+        rgba(254, 240, 138, 0.8) 35%, 
+        rgba(253, 186, 116, 0) 70%
+    );
+    border-radius: 50%;
+    filter: blur(10px);
+    z-index: 2;
+    animation: pulsoSolTarde 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulsoSolTarde {
+    0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.88; }
+    100% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+/* NUBES DE TARDE */
+#contenedor-nubes-tarde {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 55%;
+    z-index: 2.5;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.nube-tarde {
+    position: absolute;
+    height: auto;
+    filter: drop-shadow(0 4px 10px rgba(249, 115, 22, 0.2));
+    will-change: transform;
+}
+
+.nube-t-1 {
+    top: 15%;
+    left: -65vw;
+    width: 240px;
+    animation: desplazarNube 44s linear infinite;
+}
+
+.nube-t-2 {
+    top: 30%;
+    left: -55vw;
+    width: 280px;
+    animation: desplazarNube 52s linear infinite 12s;
+}
+
+/* TIPOGRAFÍA Y TEXTOS DE TARDE */
+.ui-tarde {
+    padding-top: 105px !important;
+}
+
+.titulo-tarde {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    font-style: italic;
+    color: #431407; /* Café cálido profundo */
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.6);
+}
+
+.linea-tarde {
+    background: #78350F !important;
+    opacity: 0.5 !important;
+}
+
+.corazon-tarde {
+    color: #78350F !important;
+}
+
+.mensaje-tarde {
+    color: #431407 !important;
+    text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7) !important;
+}
+
+.pie-tarde {
+    color: #78350F !important;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   ESCENA TARDE - PASO 2: POSICIONAMIENTO, CAPAS Y MARIPOSA 3D
+   ========================================================= */
+
+.capa-paisaje-tarde {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    will-change: transform;
+}
+
+/* Capa 2: Montañas al atardecer */
+.capa-tarde-montanas {
+    bottom: 28%;
+    height: 32vh;
+    z-index: 3;
+    filter: drop-shadow(0 -4px 12px rgba(249, 115, 22, 0.25));
+}
+
+
+/* =========================================================
+   SOLUCIÓN TARDE: ACOPLE PERFECTO DE CAPAS Y HUECOS
+   ========================================================= */
+
+/* 1. RÍO (Se extiende hacia abajo para llenar el hueco amarillo de agua) */
+.contenedor-rio-tarde {
+    position: absolute;
+    bottom: 12% !important;
+    width: 100%;
+    height: 46vh !important;
+    z-index: 4;
+}
+
+.capa-tarde-rio {
+    bottom: 0;
+    height: 100%;
+    object-fit: cover !important;
+}
+
+/* 2. BOSQUE MEDIO (Con máscara de desvanecido para eliminar el recuadro recto y ocultar el capullo izquierdo) */
+.capa-tarde-bosque {
+    position: absolute !important;
+    bottom: 27% !important;
+    left: -5% !important; /* Desplazar ligeramente para esconder el capullo recortado */
+    width: 110% !important; /* Expandir para evitar huecos laterales */
+    height: 28vh !important;
+    z-index: 4.5 !important;
+    object-fit: cover !important;
+    object-position: bottom center !important;
+    pointer-events: auto !important;
+    cursor: pointer;
+    filter: drop-shadow(0 -2px 6px rgba(67, 20, 7, 0.15));
+
+    /* Difuminar bordes rectos (abajo y arriba) para que se funda suavemente con el agua */
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%);
+    mask-image: linear-gradient(to top, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+/* 3. LIRIOS (Elevados para cubrir la base del bosque y conectar el primer plano) */
+.capa-tarde-lirios {
+    bottom: -5px !important;
+    width: 100% !important;
+    height: 52vh !important; /* Se eleva para tapar cualquier residuo del recorte a la izquierda */
+    z-index: 5 !important;
+    object-fit: cover !important;
+    object-position: bottom center;
+    filter: drop-shadow(0 -4px 10px rgba(67, 20, 7, 0.25));
+
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 10%, black 100%);
+    mask-image: linear-gradient(to top, transparent 0%, black 10%, black 100%);
+}
+
+
+/* =========================================================
+   AJUSTE DE HOJAS Y PÁJAROS VOLANDO (TARDE)
+   ========================================================= */
+
+/* 1. HOJAS SUPERIORES (Ajustadas más hacia la esquina superior izquierda) */
+.capa-tarde-hojas-top {
+    top: -38px !important;  /* Subir más para incrustar en el borde */
+    left: -32px !important; /* Desplazar hacia la izquierda */
+    width: 90vw !important;
+    max-width: 440px !important;
+    height: auto !important;
+    z-index: 6;
+    transform-origin: top left !important;
+    filter: drop-shadow(2px 4px 8px rgba(67, 20, 7, 0.15));
+    will-change: transform;
+    animation: balanceoHojasTarde 7.5s ease-in-out infinite alternate !important;
+}
+
+@keyframes balanceoHojasTarde {
+    0% {
+        transform: scale(1.12) rotate(0deg) translateY(0px);
+    }
+    35% {
+        transform: scale(1.14) rotate(2.2deg) translateY(3px);
+    }
+    70% {
+        transform: scale(1.11) rotate(-1.5deg) translateY(-2px);
+    }
+    100% {
+        transform: scale(1.12) rotate(1.2deg) translateY(1px);
+    }
+}
+
+/* --- MARIPOSA DE TARDE ANIMADA (3D) --- */
+.mariposa-tarde-wrapper {
+    position: absolute;
+    top: 46%;
+    left: 45%;
+    z-index: 5.5;
+    pointer-events: none;
+    animation: vueloMariposaTarde 16s ease-in-out infinite alternate;
+}
+
+.mariposa-tarde {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    transform-style: preserve-3d;
+    transform: rotateX(40deg) rotateY(15deg);
+}
+
+.ala-tarde {
+    position: absolute;
+    width: 12px;
+    height: 18px;
+    background: linear-gradient(135deg, #F97316 0%, #F59E0B 70%, #78350F 100%);
+    border-radius: 80% 20% 60% 40%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.ala-izq-tarde {
+    left: 0;
+    transform-origin: right center;
+    animation: aleteoIzq 0.45s ease-in-out infinite alternate;
+}
+
+.ala-der-tarde {
+    right: 0;
+    transform-origin: left center;
+    border-radius: 20% 80% 40% 60%;
+    animation: aleteoDer 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes aleteoIzq {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(70deg); }
+}
+
+@keyframes aleteoDer {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(-70deg); }
+}
+
+@keyframes vueloMariposaTarde {
+    0% { transform: translate(0, 0) scale(0.85); }
+    30% { transform: translate(35px, -25px) scale(1); }
+    65% { transform: translate(-25px, -45px) scale(0.9); }
+    100% { transform: translate(15px, -10px) scale(1.05); }
+}
+
+/* WIDGET CÁPSULA TARDE */
+.widget-capsula-tarde {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 18px;
+    background: rgba(67, 20, 7, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(254, 240, 138, 0.4);
+    border-radius: 35px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    pointer-events: auto;
+    max-width: 90%;
+    width: max-content;
+}
+
+/* PÉTALOS DE LIRIO BLANCO CAYENDO */
+#contenedor-petalos-tarde {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 7;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.petalo-lirio-caida {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFFDF0 60%, #FEF08A 100%);
+    border-radius: 60% 10% 60% 50%;
+    opacity: 0.9;
+    box-shadow: 0 2px 5px rgba(245, 158, 11, 0.25);
+    will-change: transform, opacity;
+    animation: caidaPetaloLirio linear infinite;
+}
+
+@keyframes caidaPetaloLirio {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    15% { opacity: 0.95; }
+    85% { opacity: 0.8; }
+    100% { transform: translateY(105vh) translateX(45px) rotate(360deg); opacity: 0; }
+}
+
+/* --- BOTONERA DE PRUEBAS TEMPORAL --- */
+#panel-pruebas {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 99999;
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 6px 10px;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+#panel-pruebas button {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#panel-pruebas button:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+/* EFECTOS TÁCTILES PARA LA TARDE */
+.sol-resplandor-tarde,
+#montanas-tarde-interactivas,
+#lirios-tarde-interactivos {
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+.sol-resplandor-tarde.destello-activo-tarde {
+    animation: estallidoSolTarde 0.8s ease-out !important;
+}
+
+@keyframes estallidoSolTarde {
+    0% { transform: translate(-50%, -50%) scale(1); filter: blur(10px) brightness(1); }
+    50% { transform: translate(-50%, -50%) scale(1.5); filter: blur(20px) brightness(1.8); }
+    100% { transform: translate(-50%, -50%) scale(1); filter: blur(10px) brightness(1); }
+}
+
+#lirios-tarde-interactivos.toque-lirio {
+    animation: sacudidaLirios 0.7s ease-in-out !important;
+}
+
+@keyframes sacudidaLirios {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-2deg) scale(1.01); }
+    75% { transform: rotate(2deg) scale(1.01); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+/* ESTILO DEL MENSAJE FLOTANTE DE LA TARDE */
+.mensaje-tarde-flotante {
+    position: absolute;
+    z-index: 99;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-style: italic;
+    color: #431407;
+    background: rgba(255, 253, 240, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    box-shadow: 0 6px 18px rgba(67, 20, 7, 0.2);
+    pointer-events: none;
+    animation: elevarYDesaparecer 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* DESHABILITAR BLOQUEO DE CAPAS TRANSPARENTES */
+.contenido-escena-ui,
+.cielo-tarde,
+#contenedor-nubes-tarde,
+.contenedor-rio-tarde,
+#contenedor-petalos-tarde {
+    pointer-events: none !important;
+}
+
+/* ACTIVAR EVENTOS TÁCTILES ÚNICAMENTE EN ELEMENTOS INTERACTIVOS */
+.sol-resplandor-tarde,
+#montanas-tarde-interactivas,
+#bosque-tarde,
+#lirios-tarde-interactivos,
+.widget-capsula-tarde {
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+/* CAPA 3.5: PASTO Y LOMAS SVG (Elevado sobre el horizonte del agua) */
+.capa-tarde-pasto {
+    position: absolute !important;
+    bottom: 31% !important; /* Elevado para que asome claramente sobre la orilla */
+    left: 0 !important;
+    width: 100% !important;
+    height: 28vh !important;
+    z-index: 4.9 !important; /* Por encima del agua (4) y visible tras los lirios */
+    pointer-events: none;
+    filter: drop-shadow(0 -4px 10px rgba(63, 98, 18, 0.35));
+}
+
+.capa-tarde-pasto svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* =========================================================
+   ESCENA TARDE: INTERACTIVIDAD TÁCTIL Y EFECTOS
+   ========================================================= */
+
+/* Habilitar clics en elementos del paisaje de la tarde */
+#sol-tarde-interactivo,
+#montanas-tarde-interactivas,
+#pasto-tarde-svg,
+#lirios-tarde-interactivos {
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+/* 1. REACCIÓN DEL SOL (Estallido cálido) */
+.sol-resplandor-tarde.destello-activo-tarde {
+    animation: estallidoSolTarde 0.8s ease-out !important;
+}
+
+@keyframes estallidoSolTarde {
+    0% { transform: translate(-50%, -50%) scale(1); filter: blur(10px) brightness(1); }
+    50% { transform: translate(-50%, -50%) scale(1.5); filter: blur(22px) brightness(1.7); }
+    100% { transform: translate(-50%, -50%) scale(1); filter: blur(10px) brightness(1); }
+}
+
+/* 2. REACCIÓN DE LOS LIRIOS (Sacudida suave) */
+#lirios-tarde-interactivos.toque-lirio {
+    animation: sacudidaLirios 0.7s ease-in-out !important;
+}
+
+@keyframes sacudidaLirios {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-2deg) scale(1.01); }
+    75% { transform: rotate(2deg) scale(1.01); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+/* 3. MENSAJES FLOTANTES EN TONO CREMA/DORADO */
+.mensaje-tarde-flotante {
+    position: absolute;
+    z-index: 99;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-style: italic;
+    color: #431407;
+    background: rgba(255, 253, 240, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    box-shadow: 0 6px 18px rgba(67, 20, 7, 0.2);
+    pointer-events: none;
+    animation: elevarYDesaparecer 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* =========================================================
+   EFECTOS AMBIENTALES DE TARDE: RAYOS Y MOTES SOLARES
+   ========================================================= */
+
+/* 1. RAYOS DE SOL (SUNBEAMS) */
+.contenedor-rayos-tarde {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.rayo-sol-tarde {
+    position: absolute;
+    top: -20%;
+    width: 120px;
+    height: 140%;
+    background: linear-gradient(
+        180deg,
+        rgba(254, 240, 138, 0.25) 0%,
+        rgba(253, 186, 116, 0.12) 50%,
+        transparent 100%
+    );
+    transform: rotate(-28deg);
+    filter: blur(12px);
+    will-change: opacity;
+}
+
+.rayo-1 { left: 15%; animation: pulsoRayo 7s ease-in-out infinite alternate; }
+.rayo-2 { left: 42%; animation: pulsoRayo 9s ease-in-out infinite alternate 2s; }
+.rayo-3 { left: 68%; animation: pulsoRayo 8s ease-in-out infinite alternate 4s; }
+
+@keyframes pulsoRayo {
+    0% { opacity: 0.3; transform: rotate(-28deg) scaleX(0.9); }
+    100% { opacity: 0.8; transform: rotate(-28deg) scaleX(1.15); }
+}
+
+/* 2. MOTES / POLVILLO DE LUZ DORADA */
+#contenedor-motes-tarde {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 8.5;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.mote-dorado {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(253, 186, 116, 0.8) 60%, transparent 100%);
+    box-shadow: 0 0 8px rgba(251, 146, 60, 0.6);
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: flotarMoteTarde linear infinite;
+}
+
+@keyframes flotarMoteTarde {
+    0% {
+        transform: translateY(105vh) translateX(0) scale(0.6);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.9;
+    }
+    80% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-5vh) translateX(35px) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* =========================================================
+   PÁJAROS EN SILUETA VOLANDO SOBRE LAS MONTAÑAS (TARDE)
+   ========================================================= */
+
+.contenedor-pajaros-tarde {
+    position: absolute;
+    top: 38% !important; /* Posicionado sobre el horizonte de las montañas lejanas */
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 10 !important; /* Visible por encima de montañas (3) y por detrás del río (4) */
+    pointer-events: none;
+    overflow: visible !important; /* Evita que el contenedor recorte las aves al entrar */
+}
+
+.pajaro-tarde {
+    position: absolute;
+    left: -60px; /* Punto de inicio fuera de la vista */
+    will-change: transform;
+}
+
+.pajaro-tarde svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    animation: aleteoPajaroTarde 0.45s ease-in-out infinite alternate;
+}
+
+/* Tamaños, transparencias y tiempos desincronizados */
+.pajaro-1 {
+    top: 0px;
+    width: 26px;
+    height: 14px;
+    opacity: 0.85;
+    animation: moverPajaroHorizontal 15s linear infinite;
+}
+
+.pajaro-2 {
+    top: 24px;
+    width: 20px;
+    height: 11px;
+    opacity: 0.7;
+    animation: moverPajaroHorizontal 15s linear infinite 2.3s;
+}
+
+.pajaro-3 {
+    top: 10px;
+    width: 15px;
+    height: 8px;
+    opacity: 0.55;
+    animation: moverPajaroHorizontal 15s linear infinite 4.6s;
+}
+
+/* Animaciones unificadas sin conflictos */
+@keyframes moverPajaroHorizontal {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    30% {
+        transform: translateX(35vw) translateY(-14px);
+    }
+    70% {
+        transform: translateX(75vw) translateY(8px);
+    }
+    100% {
+        transform: translateX(115vw) translateY(-5px);
+    }
+}
+
+@keyframes aleteoPajaroTarde {
+    0% {
+        transform: scaleY(1);
+    }
+    100% {
+        transform: scaleY(0.25);
+    }
+}
+
+/* =========================================================
+   ESTILOS FINALES: CIRCUITO DE LUZ + SEPARADOR + TÍTULOS
+   ========================================================= */
+
+/* 1. ANIMACIÓN BASE DEL CIRCUITO GIRATORIO */
+@keyframes girarCircuitoLuz {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estructura general de las tarjetas de mensaje */
+#texto-mensaje,
+#texto-mensaje-tarde,
+#texto-mensaje-noche,
+.mensaje-tarjeta,
+.mensaje-tarde,
+.mensaje-noche {
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 22px !important;
+    padding: 15px 24px !important;
+    border: none !important;
+    z-index: 1 !important;
+    display: inline-block !important;
+    max-width: 90% !important;
+}
+
+/* Tapa interior de cristal (deja libre 2px para la luz del circuito) */
+#texto-mensaje::after,
+#texto-mensaje-tarde::after,
+#texto-mensaje-noche::after,
+.mensaje-tarjeta::after,
+.mensaje-tarde::after,
+.mensaje-noche::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 20px;
+    z-index: -1;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Haz de luz cónico en movimiento constante */
+#texto-mensaje::before,
+#texto-mensaje-tarde::before,
+#texto-mensaje-noche::before,
+.mensaje-tarjeta::before,
+.mensaje-tarde::before,
+.mensaje-noche::before {
+    content: '';
+    position: absolute;
+    top: -65%;
+    left: -65%;
+    width: 230%;
+    height: 230%;
+    z-index: -2;
+    animation: girarCircuitoLuz 9s linear infinite;
+}
+
+
+/* ---------------------------------------------------------
+   A) ESCENA MAÑANA (Dorado / Amarillo Solar)
+   --------------------------------------------------------- */
+.ui-manana .titulo-manana,
+#escena-manana h2 {
+    text-shadow: 0 0 16px rgba(250, 204, 21, 0.55), 0 2px 4px rgba(120, 53, 15, 0.3) !important;
+}
+
+/* Separador — ♡ — Mañana */
+.ui-manana .separador-corazon,
+#escena-manana .separador-corazon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+.ui-manana .linea-corta,
+#escena-manana .linea-corta {
+    background: #FACC15 !important;
+    box-shadow: 0 0 8px #FACC15, 0 0 14px rgba(250, 204, 21, 0.8) !important;
+    height: 1.5px !important;
+}
+.ui-manana .corazon-icono,
+#escena-manana .corazon-icono {
+    color: #FEF08A !important;
+    text-shadow: 0 0 10px #FACC15, 0 0 18px rgba(234, 179, 8, 0.9) !important;
+}
+
+/* Tarjeta Circuito Mañana */
+.ui-manana #texto-mensaje,
+.ui-manana .mensaje-tarjeta,
+#escena-manana .mensaje-tarjeta {
+    color: #78350F !important;
+    text-shadow: 0 0 8px rgba(254, 240, 138, 0.5) !important;
+    box-shadow: 0 0 22px rgba(250, 204, 21, 0.4) !important;
+}
+.ui-manana #texto-mensaje::before,
+.ui-manana .mensaje-tarjeta::before,
+#escena-manana .mensaje-tarjeta::before {
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(234, 179, 8, 0.3) 310deg, #FFFFFF 345deg, #FACC15 360deg) !important;
+}
+.ui-manana #texto-mensaje::after,
+.ui-manana .mensaje-tarjeta::after,
+#escena-manana .mensaje-tarjeta::after {
+    background: rgba(255, 251, 235, 0.65) !important;
+}
+
+
+/* ---------------------------------------------------------
+   B) ESCENA TARDE (Cobre / Naranja Atardecer)
+   --------------------------------------------------------- */
+.ui-tarde .titulo-tarde,
+#escena-tarde h2 {
+    text-shadow: 0 0 16px rgba(251, 146, 60, 0.5), 0 2px 4px rgba(67, 20, 7, 0.3) !important;
+}
+
+/* Separador — ♡ — Tarde */
+.ui-tarde .separador-tarde,
+#escena-tarde .separador-corazon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+.ui-tarde .linea-tarde,
+.ui-tarde .linea-corta,
+#escena-tarde .linea-corta {
+    background: #F97316 !important;
+    box-shadow: 0 0 8px #F97316, 0 0 14px rgba(249, 115, 22, 0.85) !important;
+    height: 1.5px !important;
+}
+.ui-tarde .corazon-tarde,
+.ui-tarde .corazon-icono,
+#escena-tarde .corazon-icono {
+    color: #FED7AA !important;
+    text-shadow: 0 0 10px #F97316, 0 0 18px rgba(245, 158, 11, 0.95) !important;
+}
+
+/* Tarjeta Circuito Tarde */
+.ui-tarde #texto-mensaje-tarde,
+.ui-tarde .mensaje-tarde,
+#escena-tarde .mensaje-tarde {
+    color: #431407 !important;
+    text-shadow: 0 0 8px rgba(254, 215, 170, 0.5) !important;
+    box-shadow: 0 0 22px rgba(249, 115, 22, 0.35) !important;
+}
+.ui-tarde #texto-mensaje-tarde::before,
+.ui-tarde .mensaje-tarde::before,
+#escena-tarde .mensaje-tarde::before {
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(249, 115, 22, 0.3) 310deg, #FEF08A 345deg, #F97316 360deg) !important;
+}
+.ui-tarde #texto-mensaje-tarde::after,
+.ui-tarde .mensaje-tarde::after,
+#escena-tarde .mensaje-tarde::after {
+    background: rgba(255, 253, 240, 0.6) !important;
+}
+
+
+/* ---------------------------------------------------------
+   C) ESCENA NOCHE (Violeta / Místico Lunar)
+   --------------------------------------------------------- */
+.ui-noche .titulo-noche,
+#escena-noche h2 {
+    text-shadow: 0 0 16px rgba(192, 132, 252, 0.55), 0 2px 6px rgba(15, 23, 42, 0.9) !important;
+}
+
+/* Separador — ♡ — Noche */
+.ui-noche .separador-corazon,
+#escena-noche .separador-corazon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+.ui-noche .linea-corta,
+#escena-noche .linea-corta {
+    background: #C084FC !important;
+    box-shadow: 0 0 10px #C084FC, 0 0 16px rgba(168, 85, 247, 0.9) !important;
+    height: 1.5px !important;
+}
+.ui-noche .corazon-icono,
+#escena-noche .corazon-icono {
+    color: #F3E8FF !important;
+    text-shadow: 0 0 12px #C084FC, 0 0 20px rgba(192, 132, 252, 1) !important;
+}
+
+/* Tarjeta Circuito Noche */
+.ui-noche #texto-mensaje-noche,
+.ui-noche .mensaje-noche,
+#escena-noche .mensaje-noche {
+    color: #F3E8FF !important;
+    text-shadow: 0 0 8px rgba(192, 132, 252, 0.4) !important;
+    box-shadow: 0 0 22px rgba(192, 132, 252, 0.4) !important;
+}
+.ui-noche #texto-mensaje-noche::before,
+.ui-noche .mensaje-noche::before,
+#escena-noche .mensaje-noche::before {
+    background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(192, 132, 252, 0.3) 310deg, #E9D5FF 345deg, #C084FC 360deg) !important;
+}
+.ui-noche #texto-mensaje-noche::after,
+.ui-noche .mensaje-noche::after,
+#escena-noche .mensaje-noche::after {
+    background: rgba(15, 23, 42, 0.6) !important;
+}
+
+/* =========================================================
+   DETALLES DE PULIDO PARA LA PORTADA
+   ========================================================= */
+
+/* 1. Resplandor sutil en el título */
+#contenido-inicial h1,
+.portada-titulo {
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.25), 0 2px 4px rgba(67, 20, 7, 0.15) !important;
+}
+
+/* 2. Animación suave de respiración en "TOCA LA PANTALLA" */
+#contenido-inicial p:last-child,
+.indicador-toca {
+    animation: pulsoIndicador 2.2s ease-in-out infinite alternate !important;
+    letter-spacing: 2px !important;
+}
+
+@keyframes pulsoIndicador {
+    0% {
+        opacity: 0.45;
+        transform: scale(0.98);
+    }
+    100% {
+        opacity: 0.95;
+        transform: scale(1.02);
+    }
+}
+
+/* 3. Reacción al tocar o pasar el cursor sobre las 3 flores inferiores */
+#jardin-base img,
+.flor-portada {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease !important;
+    cursor: pointer;
+}
+
+#jardin-base img:hover,
+.flor-portada:hover {
+    transform: translateY(-8px) scale(1.05) rotate(2deg) !important;
+    filter: drop-shadow(0 8px 12px rgba(120, 53, 15, 0.2)) !important;
+}
+
+/* =========================================================
+   DEGRADADO DINÁMICO DE FONDO DE PORTADA SEGÚN LA HORA
+   ========================================================= */
+#portada {
+    transition: background 1.5s ease-in-out !important;
+}
+
+/* MAÑANA (04:00 AM - 11:59 AM): Cálido Amarillo / Dorado Sol */
+#portada.portada-manana {
+    background: linear-gradient(180deg, #FFFDF0 0%, #FEF9C3 100%) !important;
+}
+
+/* TARDE (12:00 PM - 06:59 PM): Crema / Ámbar Atardecer */
+#portada.portada-tarde {
+    background: linear-gradient(180deg, #FFFBEB 0%, #FFEDD5 100%) !important;
+}
+
+/* NOCHE (07:00 PM - 03:59 AM): Azul Pastel / Lavanda Místico */
+#portada.portada-noche {
+    background: linear-gradient(180deg, #F8FAFC 0%, #E2E8F0 50%, #EDE9FE 100%) !important;
+}
+
+/* =========================================================
+   NUEVO SISTEMA DE PÉTALOS DE PORTADA (GARANTIZADO)
+   ========================================================= */
+
+#contenedor-petalos {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    z-index: 99 !important; /* Prioridad máxima por encima de cualquier capa */
+}
+
+.petalo-portada-nuevo {
+    position: absolute !important;
+    top: -30px !important;
+    border-radius: 50% 0 50% 50% !important; /* Forma de pétalo natural */
+    opacity: 0.85 !important;
+    will-change: transform, opacity !important;
+    animation: caidaPetaloBamboleo linear infinite !important;
+}
+
+/* 1. Hortensia Violeta Pastel */
+.petalo-portada-nuevo.tipo-1 {
+    background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 100%) !important;
+    box-shadow: 0 0 8px rgba(192, 132, 252, 0.5) !important;
+}
+
+/* 2. Girasol Dorado Sol */
+.petalo-portada-nuevo.tipo-2 {
+    background: linear-gradient(135deg, #FEF08A 0%, #FACC15 100%) !important;
+    box-shadow: 0 0 8px rgba(250, 204, 21, 0.5) !important;
+}
+
+/* 3. Lirio Blanco / Crema */
+.petalo-portada-nuevo.tipo-3 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FED7AA 100%) !important;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Keyframe con desplazamiento suave en viento (zigzag + rotación) */
+@keyframes caidaPetaloBamboleo {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateY(50vh) translateX(30px) rotate(180deg);
+    }
+    85% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(108vh) translateX(-20px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* =========================================================
+   SISTEMA DE WIDGETS Y REPRODUCTOR INTEGRADO (OPTIMIZADO)
+   ========================================================= */
+
+/* 1. Estructura compacta e idéntica para las tres cápsulas */
+.widget-capsula-manana,
+.widget-capsula-tarde,
+.widget-capsula-noche {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 6px 12px 5px 12px !important;
+    width: calc(100% - 32px) !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. Ajuste de columnas de texto (Fecha y Hora) */
+.widget-col-izq,
+.widget-col-der {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.widget-col-izq {
+    gap: 8px !important;
+    flex: 1 1 auto !important;
+}
+
+.widget-col-der {
+    gap: 6px !important;
+}
+
+.widget-textos-fecha {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.dia-destacado,
+.fecha-subtexto,
+.hora-texto {
+    white-space: nowrap !important;
+    line-height: 1.15 !important;
+}
+
+.dia-destacado {
+    font-size: 0.85rem !important;
+}
+
+.fecha-subtexto {
+    font-size: 0.72rem !important;
+    opacity: 0.85 !important;
+    margin: 0 !important;
+}
+
+.hora-texto {
+    font-size: 0.9rem !important;
+}
+
+/* 3. Fila inferior de canción (Ajuste de margen sin espacios vacíos) */
+.widget-cancion-container {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    margin-top: 3px !important;
+    padding-top: 3px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+/* 4. Letras de canción forzadas en blanco brillante */
+.cancion-titulo-widget,
+.widget-cancion-container span {
+    color: #FFFFFF !important;
+    opacity: 0.95 !important;
+    font-size: 0.72rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px !important;
+    white-space: nowrap !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* =========================================================
+   ANIMACIÓN DE ECUALIZADOR REPARADA (TRANSFORM ESCALA)
+   ========================================================= */
+
+/* Contenedor principal */
+.ecualizador-ondas {
+    display: flex !important;
+    align-items: flex-end !important;
+    gap: 2.5px !important;
+    height: 12px !important;
+    margin-right: 3px !important;
+}
+
+/* Las 3 barritas con base fija abajo */
+.ecualizador-ondas .barra {
+    display: block !important;
+    width: 2.5px !important;
+    height: 12px !important; /* Altura base completa */
+    background-color: #FFFFFF !important;
+    border-radius: 1px !important;
+    opacity: 0.95 !important;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.6) !important;
+    transform-origin: bottom !important; /* Crece desde la base hacia arriba */
+    animation: rebotarEscala 0.7s ease-in-out infinite alternate !important;
+}
+
+/* Desfase de tiempos para ritmo de música real */
+.ecualizador-ondas .b1 { 
+    animation-delay: 0.1s !important; 
+}
+.ecualizador-ondas .b2 { 
+    animation-delay: 0.4s !important; 
+}
+.ecualizador-ondas .b3 { 
+    animation-delay: 0.25s !important; 
+}
+
+/* Animación fluida de escala vertical por GPU */
+@keyframes rebotarEscala {
+    0% {
+        transform: scaleY(0.2);
+    }
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+/* =========================================================
+   BARRA DE PROGRESO DE MÚSICA INTERACTIVA (ESTILO MINIMALISTA)
+   ========================================================= */
+
+.widget-cancion-container {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin-top: 4px !important;
+    padding-top: 2px !important;
+    border-top: none !important; /* Reemplazamos la línea estática por el slider */
+}
+
+.info-cancion-fila {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin-top: 2px !important;
+}
+
+/* Estilo del slider de control */
+.slider-progreso-musica {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 100% !important;
+    height: 3px !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 3px !important;
+    outline: none !important;
+    margin: 3px 0 2px 0 !important;
+    cursor: pointer !important;
+    transition: background 0.2s ease;
+}
+
+.slider-progreso-musica:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Botón deslizable (Thumb) */
+.slider-progreso-musica::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 9px !important;
+    height: 9px !important;
+    border-radius: 50% !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.9) !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease !important;
+}
+
+.slider-progreso-musica::-webkit-slider-thumb:hover {
+    transform: scale(1.3) !important;
+}
+
+/* =========================================================
+   AJUSTE DE POSICIÓN Y ELEVACIÓN DE BARRA Y TEXTO
+   ========================================================= */
+
+/* 1. Subir la sección completa de la música hacia arriba */
+.widget-cancion-container {
+    margin-top: -2px !important;
+    padding-top: 0 !important;
+    padding-bottom: 2px !important;
+}
+
+/* 2. Ajustar la barra deslizante (slider) más arriba */
+.slider-progreso-musica {
+    margin: 0 0 1px 0 !important;
+}
+
+/* 3. Subir el texto del título y las barritas del ecualizador */
+.info-cancion-fila {
+    margin-top: -1px !important;
+}
+
+/* Ocultar botonera para producción
+importante
+as
+as
+as
+as
+a
+as */
+
+/* Ocultar la barra de pruebas manuales para la versión final */
+.selector-momentos,
+.panel-pruebas,
+.botonera-horario {
+    display: none !important;
+}

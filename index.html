@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti</title>
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+    <!-- Agrega style="display: none !important;" al div contenedor de los botones -->
+<div class="selector-momentos" style="display: none !important;">
+    <button>Mañana</button>
+    <button>Tarde</button>
+    <button>Noche</button>
+</div>
+
+<body>
+    <!-- Parte 1: Portada interactiva -->
+    <section id="portada" class="pantalla activa">
+
+        <!-- Widget superior en tarjeta flotante translúcida -->
+        <div id="widget-tiempo" class="transicion-suave">
+            <div class="tarjeta-widget">
+                <span id="fecha-actual"></span>
+                <div id="hora-frase-container">
+                    <span id="reloj-actual"></span>
+                    <span class="separador-punto">•</span>
+                    <span id="frase-momento"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor donde caerán los pétalos de flor -->
+        <div id="contenedor-petalos"></div>
+        
+        <!-- Saludo central compactado -->
+        <div id="contenido-inicial" class="contenido-centrado transicion-suave">
+            <div class="bloque-saludo">
+                <h1>Hola mi Lenita</h1>
+                <div class="linea-dinamica"></div>
+                <div class="subtextos-agrupados">
+                    <p class="frase-rincon">Un pequeño rincón para ti</p>
+                    <p class="respiracion">toca la pantalla</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje oculto para la transición -->
+        <div id="mensaje-transicion" class="contenido-centrado oculto transicion-suave">
+            <h2>por si no te lo he dicho...</h2>
+        </div>
+
+        <!-- Jardín Inferior con flores e integrador de partículas de luz -->
+        <div id="jardin-base" class="decoracion-floral">
+            <!-- Partículas de luz que flotan desde el jardín -->
+            <div id="contenedor-particulas"></div>
+            
+            <div class="pastito"></div>
+            
+            <div class="contenedor-flores">
+                <div class="planta-jardin">
+                    <img src="img/girasolfinal.png" class="flor-imagen img-girasol" alt="Girasol">
+                </div>
+                <div class="planta-jardin" style="z-index: 5;">
+                    <img src="img/hortensiafinal.png" class="flor-imagen img-hortensia" alt="Hortensia azul">
+                </div>
+                <div class="planta-jardin">
+                    <img src="img/liriosfinal.png" class="flor-imagen img-lirio" alt="Lirios blancos">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parte 2/3/4: Contenedor dinámico (Mañana, Tarde, Noche) -->
+    <section id="escena-dinamica" class="pantalla oculta">
+        
+        <!-- Escena Específica: MAÑANA -->
+        <div id="escena-manana" class="escena-capas capa-momento">
+            
+            <!-- CAPA 1: Cielo, Sol y Nubes -->
+            <div class="cielo-manana">
+                <div id="sol-interactivo" class="sol-resplandor"></div>
+
+                <!-- Nubes de amanecer ilustradas -->
+                <div id="contenedor-nubes">
+                    <svg class="nube nube-1" viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="gradNube1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+                                <stop offset="50%" stop-color="#FFE5C4" stop-opacity="0.85"/>
+                                <stop offset="100%" stop-color="#F7A878" stop-opacity="0.4"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20,60 Q10,60 10,50 Q10,38 25,36 Q30,18 55,18 Q70,18 80,26 Q95,10 125,12 Q155,14 165,32 Q180,28 195,36 Q210,34 218,46 Q230,48 225,60 Z" fill="url(#gradNube1)" />
+                    </svg>
+
+                    <svg class="nube nube-2" viewBox="0 0 300 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="gradNube2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFFDF7" stop-opacity="0.9"/>
+                                <stop offset="60%" stop-color="#FED7AA" stop-opacity="0.75"/>
+                                <stop offset="100%" stop-color="#F97316" stop-opacity="0.3"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M15,70 Q5,70 8,58 Q12,45 30,42 Q40,20 70,20 Q90,20 102,30 Q120,12 155,12 Q190,12 205,32 Q225,22 250,30 Q275,38 285,55 Q295,68 280,70 Z" fill="url(#gradNube2)" />
+                    </svg>
+
+                    <svg class="nube nube-3" viewBox="0 0 200 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="gradNube3" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF5E6" stop-opacity="0.85"/>
+                                <stop offset="100%" stop-color="#FB923C" stop-opacity="0.25"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M10,50 C10,35 30,30 45,35 C55,20 80,20 95,30 C110,15 140,18 150,32 C165,28 185,35 185,50 Z" fill="url(#gradNube3)" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- CAPA 2: Montañas al horizonte -->
+            <img id="montanas-interactivas" src="img/manana_montanas.png" class="capa-paisaje capa-montanas" alt="Montañas">
+
+            <!-- CAPA 3: Río y Bosque (con destello de agua) -->
+            <div class="contenedor-rio">
+                <img src="img/manana_rio.png" class="capa-paisaje capa-rio" alt="Río y bosque">
+                <div class="brillo-agua"></div>
+            </div>
+
+             <!-- CAPA 4: Campo de Girasoles -->
+            <img id="girasoles-interactivos" src="img/manana_girasoles.png" class="capa-paisaje capa-girasoles-front" alt="Girasoles">
+
+            <!-- CAPA PÉTALOS DE GIRASOL CAYENDO -->
+            <div id="contenedor-petalos-manana"></div>
+
+            <!-- Contenedor para mensajes flotantes de las montañas -->
+            <div id="contenedor-mensajes-flotantes"></div>
+
+            <!-- ELEMENTOS EN MOVIMIENTO (Mariposa y Motas de Luz) -->
+            <div id="motas-sol-container"></div>
+            
+            <div class="mariposa-wrapper">
+                <div class="mariposa">
+                    <div class="ala ala-izquierda"></div>
+                    <div class="ala ala-derecha"></div>
+                </div>
+            </div>
+
+           <!-- WIDGET CÁPSULA CÁLIDA (Fecha, Hora, Sol y Música) -->
+<div class="widget-capsula-manana">
+    <div class="widget-col-izq">
+        <svg class="icono-flor-widget" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="4" fill="#F4C95D"/>
+            <path d="M12 2C11 4 11 6 12 7C13 6 13 4 12 2Z" fill="#F9B875"/>
+            <path d="M12 17C11 18 11 20 12 22C13 20 13 18 12 17Z" fill="#F9B875"/>
+            <path d="M2 12C4 11 6 11 7 12C6 13 4 13 2 12Z" fill="#F9B875"/>
+            <path d="M17 12C18 11 20 11 22 12C20 13 18 13 17 12Z" fill="#F9B875"/>
+            <path d="M4.93 4.93C6.34 6.34 7.05 7.05 7.76 7.76C6.34 7.76 4.93 7.05 4.93 4.93Z" fill="#F9B875"/>
+            <path d="M16.24 16.24C16.95 16.95 17.66 17.66 19.07 19.07C17.66 19.07 16.95 17.66 16.24 16.24Z" fill="#F9B875"/>
+            <path d="M4.93 19.07C4.93 17.66 5.64 16.95 7.05 16.24C6.34 17.66 5.63 19.07 4.93 19.07Z" fill="#F9B875"/>
+            <path d="M19.07 4.93C19.07 6.34 18.36 7.05 16.95 7.76C17.66 6.34 18.37 4.93 19.07 4.93Z" fill="#F9B875"/>
+        </svg>
+        
+        <div class="widget-textos-fecha">
+            <span id="manana-dia-semana" class="dia-destacado">Hoy es Lunes</span>
+            <span id="manana-fecha-completa" class="fecha-subtexto">27 de enero de 2025</span>
+        </div>
+    </div>
+
+    <div class="widget-separador"></div>
+
+    <div class="widget-col-der">
+        <svg class="icono-sol-widget" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4" fill="#FFF" stroke="none"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <span id="manana-reloj-hora" class="hora-texto">07:23</span>
+    </div>
+
+    <!-- SECCIÓN MÚSICA MAÑANA CON BARRA INTERACTIVA -->
+<div class="widget-cancion-container">
+    <input type="range" class="slider-progreso-musica" value="0" min="0" max="100" step="0.1">
+    <div class="info-cancion-fila">
+        <div class="ecualizador-ondas">
+            <span class="barra b1"></span>
+            <span class="barra b2"></span>
+            <span class="barra b3"></span>
+        </div>
+        <span class="cancion-titulo-widget">A Head Full of Dreams — Coldplay</span>
+    </div>
+</div>
+</div>
+
+            <!-- CAPA UI: Texto y Mensaje -->
+            <div class="contenido-escena-ui">
+                <div class="encabezado-escena">
+                    <h2 class="titulo-amanecer">¡Buenos días!</h2>
+                    <div class="separador-corazon">
+                        <span class="linea-corta"></span>
+                        <span class="corazon-icono">♡</span>
+                        <span class="linea-corta"></span>
+                    </div>
+                </div>
+
+                <p id="texto-mensaje" class="mensaje-tarjeta"></p>
+
+                <div class="pie-escena">
+                    <span>DISFRUTA ESTE DÍA</span>
+                    <span class="corazon-mini">♡</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ESCENA ESPECÍFICA: TARDE -->
+        <div id="escena-tarde" class="escena-capas capa-momento">
+            
+            <!-- CAPA 1: Cielo Azul Pastel, Blanco y Dorado -->
+            <div class="cielo-tarde">
+                <div id="sol-tarde-interactivo" class="sol-resplandor-tarde"></div>
+
+                <div id="contenedor-nubes-tarde">
+                    <svg class="nube-tarde nube-t-1" viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="gradNubeT1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+                                <stop offset="60%" stop-color="#FDE68A" stop-opacity="0.85"/>
+                                <stop offset="100%" stop-color="#F97316" stop-opacity="0.35"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20,60 Q10,60 10,50 Q10,38 25,36 Q30,18 55,18 Q70,18 80,26 Q95,10 125,12 Q155,14 165,32 Q180,28 195,36 Q210,34 218,46 Q230,48 225,60 Z" fill="url(#gradNubeT1)" />
+                    </svg>
+
+                    <svg class="nube-tarde nube-t-2" viewBox="0 0 300 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="gradNubeT2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#FFFDF7" stop-opacity="0.92"/>
+                                <stop offset="50%" stop-color="#FEF08A" stop-opacity="0.75"/>
+                                <stop offset="100%" stop-color="#FB923C" stop-opacity="0.3"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M15,70 Q5,70 8,58 Q12,45 30,42 Q40,20 70,20 Q90,20 102,30 Q120,12 155,12 Q190,12 205,32 Q225,22 250,30 Q275,38 285,55 Q295,68 280,70 Z" fill="url(#gradNubeT2)" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- RAYOS DE SOL DORADOS DE TARDE -->
+            <div class="contenedor-rayos-tarde">
+                <div class="rayo-sol-tarde rayo-1"></div>
+                <div class="rayo-sol-tarde rayo-2"></div>
+                <div class="rayo-sol-tarde rayo-3"></div>
+            </div>
+
+           <!-- PÁJAROS VOLANDO AL FONDO (TARDE) -->
+            <div class="contenedor-pajaros-tarde">
+                <div class="pajaro-tarde pajaro-1">
+                    <svg viewBox="0 0 30 16">
+                        <path d="M0,12 C6,2 13,4 15,10 C17,4 24,2 30,12 C23,7 17,9 15,14 C13,9 7,7 0,12 Z" fill="#3D1700"/>
+                    </svg>
+                </div>
+                <div class="pajaro-tarde pajaro-2">
+                    <svg viewBox="0 0 30 16">
+                        <path d="M0,12 C6,2 13,4 15,10 C17,4 24,2 30,12 C23,7 17,9 15,14 C13,9 7,7 0,12 Z" fill="#3D1700"/>
+                    </svg>
+                </div>
+                <div class="pajaro-tarde pajaro-3">
+                    <svg viewBox="0 0 30 16">
+                        <path d="M0,12 C6,2 13,4 15,10 C17,4 24,2 30,12 C23,7 17,9 15,14 C13,9 7,7 0,12 Z" fill="#3D1700"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- CAPA DE MOTES / POLVO DE LUZ DORADA -->
+            <div id="contenedor-motes-tarde"></div>
+
+            <!-- CAPA 2: Montañas lejanas al atardecer -->
+            <img id="montanas-tarde-interactivas" src="img/tarde_montanas.png" class="capa-paisaje-tarde capa-tarde-montanas" alt="Montañas de Tarde">
+
+            <!-- CAPA 3: Río y reflejos de sol -->
+            <div class="contenedor-rio-tarde">
+                <img src="img/tarde_rio.png" class="capa-paisaje-tarde capa-tarde-rio" alt="Río de Tarde">
+                <div class="brillo-agua-tarde"></div>
+            </div>
+
+            <!-- CAPA 3.5: LOMAS Y PASTO EN SVG (Visibles en ambas orillas) -->
+            <div id="pasto-tarde-svg" class="capa-paisaje-tarde capa-tarde-pasto">
+                <svg viewBox="0 0 1000 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="gradPastoVerde1" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#A3E635" stop-opacity="0.95"/>
+                            <stop offset="45%" stop-color="#65A30D" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#3F6212" stop-opacity="0.8"/>
+                        </linearGradient>
+                        <linearGradient id="gradPastoDorado2" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#BEF264" stop-opacity="0.98"/>
+                            <stop offset="50%" stop-color="#84CC16" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#4D7C0F" stop-opacity="0.85"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Loma de pasto izquierda (atrás de los lirios) -->
+                    <path d="M-50,60 Q180,10 400,160 L400,300 L-50,300 Z" fill="url(#gradPastoVerde1)" />
+
+                    <!-- Loma de pasto derecha (orilla lejana del lago) -->
+                    <path d="M250,200 Q550,50 1050,40 L1050,300 L250,300 Z" fill="url(#gradPastoDorado2)" />
+                </svg>
+            </div>
+            
+            <!-- CAPA 4: Lirios Blancos, Muro y Valla (Primer plano) -->
+            <img id="lirios-tarde-interactivos" src="img/tarde_lirios.png" class="capa-paisaje-tarde capa-tarde-lirios" alt="Lirios Blancos">
+
+            <!-- CAPA PÉTALOS DE LIRIO BLANCO CAYENDO -->
+            <div id="contenedor-petalos-tarde"></div>
+
+            <!-- CAPA 5: Follaje Superior -->
+            <img src="img/tarde_hojas_top.png" class="capa-paisaje-tarde capa-tarde-hojas-top" alt="Hojas superiores tarde">
+
+            <!-- MARIPOSA MONARCA ANIMADA 3D -->
+            <div class="mariposa-tarde-wrapper">
+                <div class="mariposa-tarde">
+                    <div class="ala-tarde ala-izq-tarde"></div>
+                    <div class="ala-tarde ala-der-tarde"></div>
+                </div>
+            </div>
+
+            <!-- WIDGET CÁPSULA TARDE -->
+<div class="widget-capsula-tarde">
+    <div class="widget-col-izq">
+        <svg class="icono-flor-widget" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3C10 7 8 10 8 14C8 17.31 9.79 20 12 20C14.21 20 16 17.31 16 14C16 10 14 7 12 3Z" fill="#FFFDF0" stroke="#F59E0B" stroke-width="1.5"/>
+            <path d="M7 8C5 11 4 14 5 17C7 17.5 9.5 16 11 14C9.5 11 8 9.5 7 8Z" fill="#FEF3C7"/>
+            <path d="M17 8C19 11 20 14 19 17C17 17.5 14.5 16 13 14C14.5 11 16 9.5 17 8Z" fill="#FEF3C7"/>
+        </svg>
+        
+        <div class="widget-textos-fecha">
+            <span id="tarde-dia-semana" class="dia-destacado">Hoy es Miércoles</span>
+            <span id="tarde-fecha-completa" class="fecha-subtexto">4 de noviembre de 2026</span>
+        </div>
+    </div>
+
+    <div class="widget-separador"></div>
+
+    <div class="widget-col-der">
+        <svg class="icono-sol-widget" viewBox="0 0 24 24" fill="none" stroke="#FFFDF0" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4" fill="#F59E0B" stroke="none"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <span id="tarde-reloj-hora" class="hora-texto">--:--</span>
+    </div>
+
+    <!-- SECCIÓN MÚSICA TARDE CON BARRA INTERACTIVA -->
+<div class="widget-cancion-container">
+    <input type="range" class="slider-progreso-musica" value="0" min="0" max="100" step="0.1">
+    <div class="info-cancion-fila">
+        <div class="ecualizador-ondas">
+            <span class="barra b1"></span>
+            <span class="barra b2"></span>
+            <span class="barra b3"></span>
+        </div>
+        <span class="cancion-titulo-widget">You Are in Love — Taylor Swift</span>
+    </div>
+</div>
+</div>
+
+            <!-- CAPA UI: Texto y Mensaje de Buenas Tardes -->
+            <div class="contenido-escena-ui ui-tarde">
+                <div class="encabezado-escena">
+                    <h2 class="titulo-tarde">¡Buenas tardes!</h2>
+                    <div class="separador-corazon separador-tarde">
+                        <span class="linea-corta linea-tarde"></span>
+                        <span class="corazon-icono corazon-tarde">♡</span>
+                        <span class="linea-corta linea-tarde"></span>
+                    </div>
+                </div>
+
+                <p id="texto-mensaje-tarde" class="mensaje-tarjeta mensaje-tarde"></p>
+
+                <div class="pie-escena pie-tarde">
+                    <span>DISFRUTA ESTE DÍA</span>
+                    <span class="corazon-mini corazon-tarde">♡</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ESCENA ESPECÍFICA: NOCHE -->
+        <div id="escena-noche" class="escena-capas capa-momento">
+            
+            <!-- CAPA 1: Cielo Nocturno, Luna Creciente y Estrellas -->
+            <div class="cielo-noche">
+                <div class="luna-wrapper">
+                    <div class="luna-resplandor-halo"></div>
+                    <svg class="luna-creciente-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="gradLuna" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FFFDF0"/>
+                                <stop offset="60%" stop-color="#FFEBB3"/>
+                                <stop offset="100%" stop-color="#F7C978"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M75 15 C50 20 35 45 40 75 C43 85 50 92 60 95 C30 92 10 65 15 35 C18 18 30 5 48 2 C60 0 70 5 75 15 Z" fill="url(#gradLuna)" />
+                    </svg>
+                </div>
+
+                <!-- Estrellas y Luciérnagas -->
+                <div id="contenedor-estrellas-noche"></div>
+                <div id="contenedor-luciernagas-noche"></div>
+            </div>
+
+            <!-- CAPA 2: Montañas Nocturnas -->
+            <img id="montanas-noche-interactivas" src="img/noche_montanas.png" class="capa-paisaje-noche capa-noche-montanas" alt="Montañas Nocturnas">
+
+            <!-- CAPA 3: Río y Bosque con Reflejos -->
+            <div class="contenedor-rio-noche">
+                <img src="img/noche_rio.png" class="capa-paisaje-noche capa-noche-rio" alt="Río nocturno">
+            </div>
+
+            <!-- CAPA 4: Campo de Hortensias y Farol (Primer plano) -->
+            <img id="hortensias-noche-interactivas" src="img/noche_hortensias_farol.png" class="capa-paisaje-noche capa-noche-hortensias" alt="Hortensias y Farol">
+
+            <!-- CAPA PÉTALOS DE HORTENSIA CAYENDO -->
+            <div id="contenedor-petalos-noche"></div>
+
+            <!-- CAPA 5: Ramas y Hojas Superiores -->
+            <img src="img/noche_hojas_top.png" class="capa-paisaje-noche capa-noche-hojas-top" alt="Hojas nocturnas superior">
+
+           <!-- WIDGET CÁPSULA NOCTURNA -->
+<div class="widget-capsula-noche">
+    <div class="widget-col-izq">
+        <svg class="icono-flor-widget" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="5" fill="#8B5CF6"/>
+            <circle cx="8" cy="10" r="3" fill="#A78BFA"/>
+            <circle cx="16" cy="10" r="3" fill="#C4B5FD"/>
+            <circle cx="10" cy="15" r="3" fill="#7C3AED"/>
+            <circle cx="14" cy="15" r="3" fill="#A78BFA"/>
+        </svg>
+        <div class="widget-textos-fecha">
+            <span id="noche-dia-semana" class="dia-destacado">Hoy es Martes</span>
+            <span id="noche-fecha-completa" class="fecha-subtexto">3 de noviembre de 2026</span>
+        </div>
+    </div>
+
+    <div class="widget-separador"></div>
+
+    <div class="widget-col-der">
+        <svg class="icono-sol-widget" viewBox="0 0 24 24" fill="none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#FFEBB3"/>
+        </svg>
+        <span id="noche-reloj-hora" class="hora-texto">--:--</span>
+    </div>
+
+    <!-- SECCIÓN MÚSICA NOCHE CON BARRA INTERACTIVA -->
+<div class="widget-cancion-container">
+    <input type="range" class="slider-progreso-musica" value="0" min="0" max="100" step="0.1">
+    <div class="info-cancion-fila">
+        <div class="ecualizador-ondas">
+            <span class="barra b1"></span>
+            <span class="barra b2"></span>
+            <span class="barra b3"></span>
+        </div>
+        <span class="cancion-titulo-widget">All My Love — Coldplay</span>
+    </div>
+</div>
+</div>
+            <!-- CAPA UI: Texto y Mensaje de Buenas noches (Con padding aumentado) -->
+            <div class="contenido-escena-ui ui-noche">
+                <div class="encabezado-escena">
+                    <h2 class="titulo-noche">¡Buenas noches!</h2>
+                    <div class="separador-corazon separador-noche">
+                        <span class="linea-corta linea-noche"></span>
+                        <span class="corazon-icono corazon-noche">♡</span>
+                        <span class="linea-corta linea-noche"></span>
+                    </div>
+                </div>
+
+                <p id="texto-mensaje-noche" class="mensaje-tarjeta mensaje-noche"></p>
+
+                <div class="pie-escena pie-noche">
+                    <span>DESCANSA BONITO</span>
+                    <span class="corazon-mini corazon-noche">♡</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Cortina de Transición Floral Dinámica (Declarada antes del script) -->
+    <div id="cortina-transicion"></div>
+
+    <!-- Reproductor de música de fondo oculto -->
+    <audio id="musica-fondo" loop></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
